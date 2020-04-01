@@ -1,20 +1,13 @@
 package main
 
-import "github.com/gin-gonic/gin"
+import (
+	"goApi/request"
 
-type Request interface{
-	Endpoint() string	
-}
+	"github.com/gin-gonic/gin"
+)
 
-type Get struct{
-	endpoint string
-}
-
-func(this Get) Endpoint() string{	
-	return this.endpoint
-}
-
-func Execute(request Request) string{
+//Execute ejecuta la peticion
+func Execute(request request.Request) string {
 	if request.Endpoint() == "ping" {
 		return "pong"
 	}
@@ -22,14 +15,14 @@ func Execute(request Request) string{
 }
 
 func main() {
-	r := gin.Default()	
+	r := gin.Default()
 	r.GET("/ping", pingHandler)
 	r.Run()
 }
 
-func pingHandler(c *gin.Context) {  
-	get := Get{"ping"}  	
-    c.JSON(200, gin.H{
+func pingHandler(c *gin.Context) {
+	get := request.Get{RequestType: "ping"}
+	c.JSON(200, gin.H{
 		"message": Execute(get),
 	})
 }
